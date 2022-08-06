@@ -74,6 +74,8 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             this.chkOrcamentosVencidos.Click += ChkOrcamentosVencidos_Click;
 
 
+            this.btnEnviaEmail.Click += BtnEnviaEmail_Click;
+
             _startDate = DateTime.Today.AddMonths(-1);
             _endDate = DateTime.Today;
             rangeDate.Date1.Value = _startDate;
@@ -108,6 +110,30 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
 
             _orcamentoList.DataSourceChanged += _orcamentoList_DataSourceChanged;
    
+        }
+
+        private void BtnEnviaEmail_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            using (var scope = dpLibrary05.Infrastructure.ServiceLocator.ServiceLocatorScoped.Factory())
+            {
+                foreach (var item in _orcamentoList.GetCheckedItems())
+                {
+
+                    if (item.Situacao == Core.Domain.Orcamentos.Enums.OrcamentoStatusEnum.Aberto.ToDataValue())
+                    {
+                        var command = new EnviarEmailOrcamentoCommand(item);
+
+                        var mediator = scope.Container.GetInstance<IMediatorHandler>();
+
+                        var notifications = scope.Container.GetInstance<INotificationHandler<DomainNotification>>();
+                        mediator.SendCommand(command);
+
+                        item.Result = Result.ResultFactory.New(notifications.GetNotifications());
+                    }
+                }
+            }
+            this.Cursor = Cursors.Default;
         }
 
         private void _orcamentoList_DataSourceChanged(object sender, Dataplace.Core.win.Controls.List.Delegates.DataSourceChangedEventArgs<OrcamentoViewModel> e)
@@ -308,7 +334,8 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
         {
             var configuration = new ViewModelListBuilder<OrcamentoViewModel>();
 
-         
+            configuration.AllowFilter();
+            configuration.AllowSort();
 
             configuration.HasHighlight(x => {
                 x.Add(orcamento => orcamento.Situacao == Core.Domain.Orcamentos.Enums.OrcamentoStatusEnum.Cancelado.ToDataValue(), System.Drawing.Color.Red);
@@ -322,9 +349,9 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             configuration.Ignore(x => x.SqTabela);
             configuration.Ignore(x => x.CdTabela);
             configuration.Ignore(x => x.CdVendedor);
-            //configuration.Ignore(x => x.DiasValidade);
-            //configuration.Ignore(x => x.DataValidade);
             configuration.Ignore(x => x.TotalItens);
+            configuration.Ignore(x => x.EmailVendedor);
+            configuration.Ignore(x => x.NomeVendedor);            
 
             configuration.Property(x => x.Situacao)
                   .HasMinWidth(100)
@@ -445,7 +472,9 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
 
         private async void BtnCarregar_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             await _orcamentoList.LoadAsync();
+            this.Cursor = Cursors.Default;
         }
  
         private async void chk_Click(object sender, EventArgs e)
@@ -476,7 +505,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             {
                 chkAberto.Checked = false;
                 chkFechado.Checked = true;
-                chkCancelado.Checked = true;
+                chkCancelado.Checked = false;
             }
             _orcamentoList.Clear();
         }

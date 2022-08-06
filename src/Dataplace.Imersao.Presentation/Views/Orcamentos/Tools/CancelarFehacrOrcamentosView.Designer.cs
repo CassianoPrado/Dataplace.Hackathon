@@ -57,6 +57,7 @@
             this.dpiNumOrcamento = new dpLibrary05.Infrastructure.Controls.DPInput();
             this.chkDataOrcamento = new System.Windows.Forms.CheckBox();
             this.optReabrirOrcamento = new System.Windows.Forms.RadioButton();
+            this.btnEnviaEmail = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridOrcamento)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -90,11 +91,11 @@
             // btnCarregar
             // 
             this.btnCarregar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCarregar.Location = new System.Drawing.Point(1233, 46);
+            this.btnCarregar.Location = new System.Drawing.Point(1230, 46);
             this.btnCarregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCarregar.Name = "btnCarregar";
             this.btnCarregar.Size = new System.Drawing.Size(109, 30);
-            this.btnCarregar.TabIndex = 0;
+            this.btnCarregar.TabIndex = 5;
             this.btnCarregar.Text = "Carregar";
             this.btnCarregar.UseVisualStyleBackColor = true;
             this.btnCarregar.Click += new System.EventHandler(this.BtnCarregar_Click);
@@ -207,7 +208,7 @@
             this.rangeDate.OpenModal = false;
             this.rangeDate.Parameters = ((System.Collections.Generic.IDictionary<string, object>)(resources.GetObject("rangeDate.Parameters")));
             this.rangeDate.Size = new System.Drawing.Size(464, 27);
-            this.rangeDate.TabIndex = 0;
+            this.rangeDate.TabIndex = 1;
             this.rangeDate.TabOrderScheme = dpLibrary05.TabOrderManager.TabScheme.None;
             // 
             // gbData
@@ -226,6 +227,7 @@
             // 
             this.gbAcoes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbAcoes.Controls.Add(this.btnEnviaEmail);
             this.gbAcoes.Controls.Add(this.optReabrirOrcamento);
             this.gbAcoes.Controls.Add(this.optFechar);
             this.gbAcoes.Controls.Add(this.optCancelar);
@@ -274,7 +276,7 @@
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Size = new System.Drawing.Size(550, 113);
-            this.groupBox2.TabIndex = 501;
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Situação do Vencimento";
             // 
@@ -341,7 +343,7 @@
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Size = new System.Drawing.Size(1222, 79);
-            this.groupBox3.TabIndex = 502;
+            this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtrar Oçamento Induvidual ou Por Cliente:";
             // 
@@ -425,6 +427,17 @@
             this.optReabrirOrcamento.Text = "Reabrir orçamento";
             this.optReabrirOrcamento.UseVisualStyleBackColor = true;
             // 
+            // btnEnviaEmail
+            // 
+            this.btnEnviaEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEnviaEmail.Location = new System.Drawing.Point(1111, 46);
+            this.btnEnviaEmail.Name = "btnEnviaEmail";
+            this.btnEnviaEmail.Size = new System.Drawing.Size(228, 30);
+            this.btnEnviaEmail.TabIndex = 3;
+            this.btnEnviaEmail.Text = "Enviar Email";
+            this.btnEnviaEmail.UseVisualStyleBackColor = true;
+            // 
             // CancelarFehacrOrcamentosView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -495,5 +508,6 @@
         private dpLibrary05.Infrastructure.Controls.DPInput dpiNumOrcamento;
         private System.Windows.Forms.CheckBox chkDataOrcamento;
         private System.Windows.Forms.RadioButton optReabrirOrcamento;
+        private System.Windows.Forms.Button btnEnviaEmail;
     }
 }

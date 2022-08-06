@@ -24,6 +24,9 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.ViewModels
         public int? DiasValidade { get; set; }
         public DateTime? DataValidade { get; set; }
 
+        public string EmailVendedor { get; set; }
+        public string NomeVendedor { get; set; }
+
 
 
         //public decimal TotalItem

@@ -97,6 +97,7 @@
     <Compile Include="Application\Orcamentos\Commands\AtualizarOrcamentoCommand.cs" />
     <Compile Include="Application\Orcamentos\Commands\AtualizarItemCommand.cs" />
     <Compile Include="Application\Orcamentos\Commands\CancelarOrcamentoCommand.cs" />
+    <Compile Include="Application\Orcamentos\Commands\EnviarEmailOrcamentoCommand.cs" />
     <Compile Include="Application\Orcamentos\Commands\ExcluirOrcamentoCommand.cs" />
     <Compile Include="Application\Orcamentos\Commands\ExcluirItemCommand.cs" />
     <Compile Include="Application\Orcamentos\Commands\FecharOrcamentoCommand.cs" />
