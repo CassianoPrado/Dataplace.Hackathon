@@ -94,7 +94,7 @@
             this.btnCarregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCarregar.Name = "btnCarregar";
             this.btnCarregar.Size = new System.Drawing.Size(109, 30);
-            this.btnCarregar.TabIndex = 2;
+            this.btnCarregar.TabIndex = 0;
             this.btnCarregar.Text = "Carregar";
             this.btnCarregar.UseVisualStyleBackColor = true;
             this.btnCarregar.Click += new System.EventHandler(this.BtnCarregar_Click);
@@ -246,7 +246,7 @@
             this.optFechar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.optFechar.Name = "optFechar";
             this.optFechar.Size = new System.Drawing.Size(137, 20);
-            this.optFechar.TabIndex = 0;
+            this.optFechar.TabIndex = 1;
             this.optFechar.Text = "Fechar orçamento";
             this.optFechar.UseVisualStyleBackColor = true;
             // 
@@ -257,7 +257,7 @@
             this.optCancelar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.optCancelar.Name = "optCancelar";
             this.optCancelar.Size = new System.Drawing.Size(149, 20);
-            this.optCancelar.TabIndex = 6;
+            this.optCancelar.TabIndex = 0;
             this.optCancelar.Text = "Cancelar orçamento";
             this.optCancelar.UseVisualStyleBackColor = true;
             // 
@@ -284,7 +284,7 @@
             this.label1.Location = new System.Drawing.Point(264, 73);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 16);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 5;
             this.label1.Text = "dias";
             // 
             // label2
@@ -293,7 +293,7 @@
             this.label2.Location = new System.Drawing.Point(224, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(88, 16);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 2;
             this.label2.Text = "dias a vencer";
             // 
             // txtDiasAVencer
@@ -301,14 +301,14 @@
             this.txtDiasAVencer.Location = new System.Drawing.Point(174, 32);
             this.txtDiasAVencer.Name = "txtDiasAVencer";
             this.txtDiasAVencer.Size = new System.Drawing.Size(44, 22);
-            this.txtDiasAVencer.TabIndex = 2;
+            this.txtDiasAVencer.TabIndex = 1;
             // 
             // txtDiasVencidos
             // 
             this.txtDiasVencidos.Location = new System.Drawing.Point(214, 67);
             this.txtDiasVencidos.Name = "txtDiasVencidos";
             this.txtDiasVencidos.Size = new System.Drawing.Size(44, 22);
-            this.txtDiasVencidos.TabIndex = 5;
+            this.txtDiasVencidos.TabIndex = 4;
             // 
             // chkOrcamentosAVencer
             // 
@@ -317,7 +317,7 @@
             this.chkOrcamentosAVencer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chkOrcamentosAVencer.Name = "chkOrcamentosAVencer";
             this.chkOrcamentosAVencer.Size = new System.Drawing.Size(131, 20);
-            this.chkOrcamentosAVencer.TabIndex = 6;
+            this.chkOrcamentosAVencer.TabIndex = 0;
             this.chkOrcamentosAVencer.Text = "Orçamentos com";
             this.chkOrcamentosAVencer.UseVisualStyleBackColor = true;
             // 
@@ -328,7 +328,7 @@
             this.chkOrcamentosVencidos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chkOrcamentosVencidos.Name = "chkOrcamentosVencidos";
             this.chkOrcamentosVencidos.Size = new System.Drawing.Size(171, 20);
-            this.chkOrcamentosVencidos.TabIndex = 7;
+            this.chkOrcamentosVencidos.TabIndex = 3;
             this.chkOrcamentosVencidos.Text = "Orçamentos vencidos à";
             this.chkOrcamentosVencidos.UseVisualStyleBackColor = true;
             // 
@@ -372,7 +372,7 @@
             this.dpiCliente.SearchObject = null;
             this.dpiCliente.SettingValue = false;
             this.dpiCliente.Size = new System.Drawing.Size(467, 44);
-            this.dpiCliente.TabIndex = 3;
+            this.dpiCliente.TabIndex = 1;
             // 
             // dpiNumOrcamento
             // 
@@ -399,7 +399,7 @@
             this.dpiNumOrcamento.SearchObject = null;
             this.dpiNumOrcamento.SettingValue = false;
             this.dpiNumOrcamento.Size = new System.Drawing.Size(92, 44);
-            this.dpiNumOrcamento.TabIndex = 2;
+            this.dpiNumOrcamento.TabIndex = 0;
             // 
             // chkDataOrcamento
             // 
@@ -410,7 +410,7 @@
             this.chkDataOrcamento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chkDataOrcamento.Name = "chkDataOrcamento";
             this.chkDataOrcamento.Size = new System.Drawing.Size(146, 20);
-            this.chkDataOrcamento.TabIndex = 2;
+            this.chkDataOrcamento.TabIndex = 0;
             this.chkDataOrcamento.Text = "Data do Orçamento";
             this.chkDataOrcamento.UseVisualStyleBackColor = true;
             // 
@@ -421,7 +421,7 @@
             this.optReabrirOrcamento.Margin = new System.Windows.Forms.Padding(4);
             this.optReabrirOrcamento.Name = "optReabrirOrcamento";
             this.optReabrirOrcamento.Size = new System.Drawing.Size(140, 20);
-            this.optReabrirOrcamento.TabIndex = 7;
+            this.optReabrirOrcamento.TabIndex = 2;
             this.optReabrirOrcamento.Text = "Reabrir orçamento";
             this.optReabrirOrcamento.UseVisualStyleBackColor = true;
             // 
