@@ -178,7 +178,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             // definições iniciais do projeto
             // item seguraça
             // engine code
-            this.Text = "Cancelar/Fechar orçamentos em aberto";
+            this.Text = "Gestão de Orçamentos";
             e.SecurityIdList.Add(_itemSeg);
             e.CancelButtonVisisble = true;
             
