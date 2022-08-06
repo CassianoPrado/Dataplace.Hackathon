@@ -109,7 +109,11 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             VerificarStatusControles();
 
             _orcamentoList.DataSourceChanged += _orcamentoList_DataSourceChanged;
-   
+
+            if (rangeDate.Date1.Parent is TableLayoutPanel t)
+            {
+                t.Width = 300;
+            }
         }
 
         private void BtnEnviaEmail_Click(object sender, EventArgs e)
