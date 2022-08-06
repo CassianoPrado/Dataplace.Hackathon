@@ -10,12 +10,15 @@ using Dataplace.Imersao.Core.Application.Orcamentos.Commands;
 using Dataplace.Imersao.Core.Application.Orcamentos.Queries;
 using Dataplace.Imersao.Core.Application.Orcamentos.ViewModels;
 using Dataplace.Imersao.Core.Domain.Orcamentos.Enums;
+using Dataplace.Imersao.Presentation.Common;
 using Dataplace.Imersao.Presentation.Views.Orcamentos.Messages;
 using dpLibrary05.Infrastructure.Helpers;
 using dpLibrary05.Infrastructure.Helpers.Permission;
+using dpLibrary05.SymphonyInterface;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -66,12 +69,31 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             // pegar evento clique das opçoes
             this.optCancelar.Click += opt_Click;
             this.optFechar.Click += opt_Click;
+            this.optAbrirOrcamento.Click += opt_Click;
+            this.chkOrcamentosAVencer.Click += chkOrcamentosAVencer_Click;
+            this.chkOrcamentosVencidos.Click += ChkOrcamentosVencidos_Click;
 
 
             _startDate = DateTime.Today.AddMonths(-1);
             _endDate = DateTime.Today;
             rangeDate.Date1.Value = _startDate;
             rangeDate.Date2.Value = _endDate;
+
+            txtDiasAVencer.Text = "10";
+            txtDiasVencidos.Text = "3";
+
+            //Pesquisa orçamento
+            dpiNumOrcamento.FindMode = true;
+            dpiNumOrcamento.DP_InputType = dpLibrary05.Infrastructure.Controls.DPInput.InputTypeEnum.SearchValueInput;
+            dpiNumOrcamento.SearchObject = GetOrcamentoSearchObject();
+
+            // componentes
+            dpiCliente.DP_InputType = dpLibrary05.Infrastructure.Controls.DPInput.InputTypeEnum.SearchValueInput;
+            if (dpiCliente.CurrentControl is dpLibrary05.Infrastructure.Controls.DPLookUpEdit l)
+            {
+                l.DP_ShowCaption = true;
+            }
+            dpiCliente.SearchObject = GetClienteSearchObject();
 
 
             // pegar key down de um controle
@@ -83,7 +105,32 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             //  desabilitar ou habilitar algun componente em tela
             //  deixar invisível ou algo assim
             VerificarStatusControles();
+
+            _orcamentoList.DataSourceChanged += _orcamentoList_DataSourceChanged;
    
+        }
+
+        private void _orcamentoList_DataSourceChanged(object sender, Dataplace.Core.win.Controls.List.Delegates.DataSourceChangedEventArgs<OrcamentoViewModel> e)
+        {
+            gridOrcamento.Splits[0].DisplayColumns["DtFechamento"].HeadingStyle.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+            gridOrcamento.Splits[0].DisplayColumns["DtFechamento"].Style.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+            gridOrcamento.Splits[0].DisplayColumns["DataValidade"].HeadingStyle.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+            gridOrcamento.Splits[0].DisplayColumns["DataValidade"].Style.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+            gridOrcamento.Splits[0].DisplayColumns["DiasValidade"].HeadingStyle.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+            gridOrcamento.Splits[0].DisplayColumns["DiasValidade"].Style.HorizontalAlignment = C1.Win.C1TrueDBGrid.AlignHorzEnum.Far;
+        }
+
+        private void ChkOrcamentosVencidos_Click(object sender, EventArgs e)
+        {
+            if (chkOrcamentosVencidos.Checked)
+                chkOrcamentosAVencer.Checked = false;            
+        }
+
+        private void chkOrcamentosAVencer_Click(object sender, EventArgs e)
+        {
+            if (chkOrcamentosAVencer.Checked)
+                chkOrcamentosVencidos.Checked = false;            
+            
         }
         #endregion
 
@@ -94,6 +141,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
         {
             CancelarOrcamento,
             FecharOrcamento,
+            AbrirOrcamento
         }
         private void CancelamentoOrcamentoView_ToolConfiguration(object sender, ToolConfigurationEventArgs e)
         {
@@ -115,7 +163,8 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             if (optFechar.Checked)
                 _tipoAcao = TipoAcaoEnum.FecharOrcamento;
 
-
+            if (optAbrirOrcamento.Checked)
+                _tipoAcao = TipoAcaoEnum.AbrirOrcamento;
 
             var permission = PermissionControl.Factory().ValidatePermission(_itemSeg, dpLibrary05.mGenerico.PermissionEnum.Execute);
             if (!permission.IsAuthorized())
@@ -162,6 +211,10 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
                         await FecharOrcamento(item);
                         // registrar log na parte de detalhes
                         e.LogBuilder.Items.Add($"Orçamento {item.NumOrcamento} fechado", dpLibrary05.Infrastructure.Helpers.LogBuilder.LogTypeEnum.Information);
+                        break;
+                    case TipoAcaoEnum.AbrirOrcamento:
+                        await AbrirOrcamento(item);
+                        e.LogBuilder.Items.Add($"Orçamento {item.NumOrcamento} aberto", dpLibrary05.Infrastructure.Helpers.LogBuilder.LogTypeEnum.Information);
                         break;
                     default:
                         break;
@@ -268,8 +321,8 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             configuration.Ignore(x => x.SqTabela);
             configuration.Ignore(x => x.CdTabela);
             configuration.Ignore(x => x.CdVendedor);
-            configuration.Ignore(x => x.DiasValidade);
-            configuration.Ignore(x => x.DataValidade);
+            //configuration.Ignore(x => x.DiasValidade);
+            //configuration.Ignore(x => x.DataValidade);
             configuration.Ignore(x => x.TotalItens);
 
             configuration.Property(x => x.Situacao)
@@ -300,11 +353,25 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
                 .HasCaption("Total")
                 .HasFormat("n");
 
-
             configuration.Property(x => x.DtFechamento)
                 .HasMinWidth(80)
                 .HasCaption("Fechamento")
                 .HasFormat("d");
+
+            configuration.Property(x => x.DiasValidade)
+                .HasMinWidth(80)
+                .HasCaption("Dias de Validade")
+                .HasFormat("#.##");
+
+            configuration.Property(x => x.DataValidade)
+                .HasMinWidth(80)
+                .HasCaption("Validade")
+                .HasFormat("d");
+
+            configuration.Property(x => x.NumOrcamento)
+               .HasMinWidth(50)
+               .HasCaption("Nº do Orçamento");
+
 
             return configuration;
         }
@@ -327,8 +394,34 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
 
             if (rangeDate.Date2.Value is DateTime d2)
                 dtFim = d2;
+                        
+            int qtdDiasAvencer = chkOrcamentosAVencer.Checked ? int.Parse(txtDiasAVencer.Text)  : 0;
+            int qtdDiasVencidos = chkOrcamentosVencidos.Checked ? int.Parse(txtDiasVencidos.Text) : 0;
 
-            var query = new OrcamentoQuery() { SituacaoList = situacaoList, DtInicio =  dtInicio, DtFim =  dtFim };
+            int numOrcamentoIndividual = 0;
+            if (dpiNumOrcamento.GetValue().ToString() != String.Empty)
+                numOrcamentoIndividual = int.Parse(dpiNumOrcamento.GetValue().ToString());
+
+            string cdCliente = String.Empty;
+            if (dpiNumOrcamento.GetValue().ToString() == String.Empty && dpiCliente.GetValue().ToString() != String.Empty)
+                cdCliente =  dpiCliente.GetValue().ToString();
+
+            if(!chkDataOrcamento.Checked)
+            {
+                dtInicio = null;
+                dtFim = null;
+            }
+
+            var query = new OrcamentoQuery()
+            {
+                SituacaoList = situacaoList,
+                DtInicio = dtInicio,
+                DtFim = dtFim,
+                QtdDiasAVencer = qtdDiasAvencer,
+                QtdDiasVencidos = qtdDiasVencidos,
+                NumOrcamentoIndividual = numOrcamentoIndividual,
+                CdCliente = cdCliente
+            };
             return query;
         }
 
@@ -413,11 +506,81 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
                     item.Situacao = Core.Domain.Orcamentos.Enums.OrcamentoStatusEnum.Fechado.ToDataValue();
                     item.DtFechamento = DateTime.Now.Date;
                 }
-
             }
+        }
+
+        private async Task AbrirOrcamento(OrcamentoViewModel item)
+        {
+            //parei aqui
+            using (var scope = dpLibrary05.Infrastructure.ServiceLocator.ServiceLocatorScoped.Factory())
+            {
+
+                var command = new ReabrirOrcamentoCommand(item);
+                var mediator = scope.Container.GetInstance<IMediatorHandler>();
+
+                var notifications = scope.Container.GetInstance<INotificationHandler<DomainNotification>>();
+                await mediator.SendCommand(command);
+
+                item.Result = Result.ResultFactory.New(notifications.GetNotifications());
+                if (item.Result.Success)
+                {
+                    item.Situacao = Core.Domain.Orcamentos.Enums.OrcamentoStatusEnum.Aberto.ToDataValue();
+                    item.DtFechamento = null;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Pesquisas
+        private ISymInterfaceSearch _orcamentoSearchObject;
+        private ISymInterfaceSearch GetOrcamentoSearchObject()
+        {
+
+            if (_orcamentoSearchObject == null)
+                _orcamentoSearchObject = PedidoSearch.find_orcamento();
+
+            _orcamentoSearchObject.BeforeSearch += (object sender, BeforeSearchEventArgs e) =>
+            {
+                e.SearchObject.Filter = "1=1";
+            };
+
+            _orcamentoSearchObject.AfterSearch += async (object sender, AfterSearchEventArgs e) =>
+            {
+                if (e.result)
+                {
+                    if (e.item is DataRow r)
+                    {
+                        if (r["NumOrcamento"] is int n)
+                        {
+                            dpiCliente.SearchObject.Fields[0].SetValue(r["CdCliente"]);
+                            dpiCliente.SearchObject.Fields[1].SetValue(r["razao"]);
+                        }
+
+                    }
+                }
+            };
+
+            return _orcamentoSearchObject;
 
         }
 
+
+        private ISymInterfaceSearch _clienteSearchObject;
+        private ISymInterfaceSearch GetClienteSearchObject()
+        {
+
+            if (_clienteSearchObject == null)
+                _clienteSearchObject = PedidoSearch.find_orcamento_cliente();
+
+            _clienteSearchObject.BeforeSearch += (object sender, BeforeSearchEventArgs e) =>
+            {
+                e.SearchObject.Filter = "1=1";                
+            };
+
+            return _clienteSearchObject;
+
+        }
         #endregion
 
     }

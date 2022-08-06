@@ -36,8 +36,8 @@ namespace Dataplace.Imersao.App
                 .OnLoadApp(x=> {
   
                 })
-                .OnCloseApp(x => { 
-                
+                .OnCloseApp(x => {
+                    dpLibrary05.mGenerico.SymphonyApp.MainForm.Close();
                 });
             ConfigureServices(builder.Services);
             var app = builder.Build();

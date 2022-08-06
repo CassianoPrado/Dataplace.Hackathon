@@ -25,6 +25,17 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.ViewModels
         public DateTime? DataValidade { get; set; }
 
 
+
+        //public decimal TotalItem
+        //{
+        //    get
+        //    {
+        //        return QtdProduto * VlCalculado;
+        //    }
+        //}
+
+
+
         // exemplo de propriedade desconectada do banco de dados
         //public string StValidade { 
         //    get
@@ -36,7 +47,7 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.ViewModels
         //            return "1";
 
         //        return "2";
-            
+
         //    } 
         //}
 

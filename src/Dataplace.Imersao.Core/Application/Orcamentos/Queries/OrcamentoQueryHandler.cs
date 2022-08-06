@@ -49,7 +49,7 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Queries
 	            Orcamento.CdVendedor,
                 Vendedor.Nome as NomeVendedor,
 		        Orcamento.numdias as DiasValidade,
-		        Orcamento.dtvalidade DataValidade,	     
+		        Orcamento.dtvalidade as DataValidade,	     
 		        Orcamento.DtFechamento,
 		        Orcamento.Usuario,
 		   		Orcamento.CdTabela,
@@ -80,15 +80,26 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Queries
 
 
             if (request.Situacao.HasValue)
-                builder.Where("orcamento.StOrcamento = @Situacao", new { Situacao = request.Situacao.Value.ToDataValue()});
+                builder.Where("orcamento.storcamento = @Situacao", new { Situacao = request.Situacao.Value.ToDataValue()});
 
             if (request.SituacaoList != null && request.SituacaoList.Count > 0)
-                builder.Where($"orcamento.StOrcamento IN ('{string.Join("','", request.SituacaoList.Select(x => x.ToDataValue()))}')");
+                builder.Where($"orcamento.storcamento IN ('{string.Join("','", request.SituacaoList.Select(x => x.ToDataValue()))}')");
 
             if(request.DtInicio.HasValue && request.DtFim.HasValue)
-                builder.Where("orcamento.DtOrcamento between @DtInicio AND @DtFim ", new { DtInicio = request.DtInicio.Value.Date, DtFim = request.DtFim.Value.Date.AddDays(1).AddSeconds(-1) });
+                builder.Where("orcamento.dtorcamento BETWEEN @DtInicio AND @DtFim ", new { DtInicio = request.DtInicio.Value.Date, DtFim = request.DtFim.Value.Date.AddDays(1).AddSeconds(-1) });
 
+            if (request.QtdDiasAVencer > 0)
+                builder.Where("orcamento.dtvalidade BETWEEN getdate() AND DATEADD(d, @QtdDiasAVencer, getdate()) ", new { QtdDiasAVencer = request.QtdDiasAVencer });
 
+            if (request.QtdDiasVencidos > 0)
+                builder.Where("orcamento.dtvalidade BETWEEN DATEADD(d, - @QtdDiasVencidos, getdate()) AND getdate() ", new { QtdDiasVencidos = request.QtdDiasVencidos });
+
+            if (request.NumOrcamentoIndividual != 0)
+                builder.Where("orcamento.numorcamento = @NumOrcamento ", new { NumOrcamento = request.NumOrcamentoIndividual });
+
+            if (request.CdCliente != string.Empty)
+                builder.Where("orcamento.cdcliente = @CdCliente ", new { CdCliente = request.CdCliente });
+            
             builder.OrderBy("orcamento.DtOrcamento DESC");
 
             var cmd = new CommandDefinition(selector.RawSql, selector.Parameters, flags: CommandFlags.NoCache);
@@ -108,7 +119,7 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Queries
 		        Orcamento.DtOrcamento,
 		        Orcamento.vlvendar as VlTotal,
 		        Orcamento.numdias as DiasValidade,
-		        Orcamento.dtvalidade DataValidade,	
+		        Orcamento.dtvalidade as DataValidade,	
 		        Orcamento.CdTabela,
 		        Orcamento.SqTabela,
 		        Orcamento.DtFechamento,
