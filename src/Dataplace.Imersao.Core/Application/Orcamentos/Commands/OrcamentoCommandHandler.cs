@@ -1,8 +1,10 @@
 ﻿using Dataplace.Core.Comunications;
 using Dataplace.Core.Domain.CommandHandlers;
+using Dataplace.Core.Domain.Email;
 using Dataplace.Core.Domain.Interfaces;
 using Dataplace.Core.Domain.Interfaces.UoW;
 using Dataplace.Core.Domain.Notifications;
+using Dataplace.Core.Domain.Users.Repositories;
 using Dataplace.Imersao.Core.Application.Orcamentos.Events;
 using Dataplace.Imersao.Core.Domain.Orcamentos;
 using Dataplace.Imersao.Core.Domain.Orcamentos.Enums;
@@ -30,8 +32,8 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Commands
         IRequestHandler<AtualizarItemCommand, bool>,
         IRequestHandler<ExcluirItemCommand, bool>,
         IRequestHandler<AtribuirDataDePrevisaoEntregaAoOrcamentoCommand, bool>,
-        IRequestHandler<RemoverDataDePrevisaoEntregaAoOrcamentoCommand, bool>
-
+        IRequestHandler<RemoverDataDePrevisaoEntregaAoOrcamentoCommand, bool>,
+        IRequestHandler<EnviarEmailOrcamentoCommand, bool>
 
     {
 
@@ -39,6 +41,8 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Commands
         private readonly IOrcamentoRepository _orcamentoRepository;
         private readonly IOrcamentoService _orcamentoService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IEmailService _emailService;
+        private readonly IUserRepository _userRepository;
         #endregion
 
         #region constructor
@@ -48,11 +52,15 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Commands
             INotificationHandler<DomainNotification> notifications,
             IOrcamentoRepository orcamentoRepository,
             IOrcamentoService orcamentoService,
-            IEnvironmentService environmentService) : base(uow, bus, notifications)
+            IEnvironmentService environmentService,
+            IEmailService emailService,
+            IUserRepository userRepository) : base(uow, bus, notifications)
         {
             _orcamentoRepository = orcamentoRepository;
             _orcamentoService = orcamentoService;
             _environmentService = environmentService;
+            _emailService = emailService;
+            _userRepository = userRepository;
         }
 
         #endregion
@@ -355,6 +363,34 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Commands
             AddEvent(new DataDePrevisaoDeEntregaRemovidaAoOrcamentoEvent(request.Item));
             return Commit(transactionId);
         }
+
+        public async Task<bool> Handle(EnviarEmailOrcamentoCommand request, CancellationToken cancellationToken)
+        {
+            string subject = $"Orçamento nº {request.Item.NumOrcamento}.";
+            string message = $"Olá vendedor {request.Item.NomeVendedor.Trim()}.\n\nO orçamento {request.Item.NumOrcamento} está prestes a perder sua validade, favor entrar em contato com cliente.\n\nObrigado.";
+
+            var user = _userRepository.GetByUserName(dpLibrary05.mGenerico.strUserName_P);
+            var email = _emailService.GenerateMessage(
+                user.Email,
+                new string[] { request.Item.EmailVendedor },
+                null,
+                null,
+                null,
+                subject,
+                message,
+                false);
+            _emailService.SendMail((Dataplace.Core.Infra.CrossCutting.Email.InfoMessageEnvioEmail)email,
+                                   user.Contaautenticacao.Trim(),
+                                   user.SenhaAutenticacao,
+                                   _environmentService.SmtpPort,
+                                   _environmentService.SmtpServer,
+                                   _environmentService.UseSsl,
+                                   false);
+            
+            AddEvent(new DataDePrevisaoDeEntregaRemovidaAoOrcamentoEvent(request.Item));
+            return true;
+        }
+
         #endregion
 
         #region methods orçamento item
