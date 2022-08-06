@@ -56,7 +56,9 @@ namespace Dataplace.Imersao.Core.Application.Orcamentos.Queries
 		        Orcamento.SqTabela,
                 -- previsão de entrega vem dos itens
                 (SELECT COUNT(1) FROM OrcamentoItem where OrcamentoItem.numorcamento = Orcamento.numorcamento and OrcamentoItem.CdEmpresa = Orcamento.CdEmpresa AND OrcamentoItem.CdFilial = Orcamento.CdFilial) AS TotalItens,
-                (SELECT MIN(OrcamentoItem.dtpreventrega) FROM OrcamentoItem where OrcamentoItem.numorcamento = Orcamento.numorcamento and OrcamentoItem.CdEmpresa = Orcamento.CdEmpresa AND OrcamentoItem.CdFilial = Orcamento.CdFilial) AS DtPrevEntrega
+                (SELECT MIN(OrcamentoItem.dtpreventrega) FROM OrcamentoItem where OrcamentoItem.numorcamento = Orcamento.numorcamento and OrcamentoItem.CdEmpresa = Orcamento.CdEmpresa AND OrcamentoItem.CdFilial = Orcamento.CdFilial) AS DtPrevEntrega,
+                vendedor.email as EmailVendedor,
+                vendedor.nome as NomeVendedor
 
 	        FROM Orcamento
                 INNER JOIN cliente 
