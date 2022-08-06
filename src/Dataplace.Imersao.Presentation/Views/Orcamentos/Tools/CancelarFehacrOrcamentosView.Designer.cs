@@ -429,8 +429,7 @@
             // 
             // btnEnviaEmail
             // 
-            this.btnEnviaEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEnviaEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEnviaEmail.Location = new System.Drawing.Point(1111, 46);
             this.btnEnviaEmail.Name = "btnEnviaEmail";
             this.btnEnviaEmail.Size = new System.Drawing.Size(228, 30);
