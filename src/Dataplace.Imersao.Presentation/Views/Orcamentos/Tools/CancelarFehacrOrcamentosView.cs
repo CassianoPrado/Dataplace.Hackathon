@@ -69,7 +69,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             // pegar evento clique das opçoes
             this.optCancelar.Click += opt_Click;
             this.optFechar.Click += opt_Click;
-            this.optAbrirOrcamento.Click += opt_Click;
+            this.optReabrirOrcamento.Click += opt_Click;
             this.chkOrcamentosAVencer.Click += chkOrcamentosAVencer_Click;
             this.chkOrcamentosVencidos.Click += ChkOrcamentosVencidos_Click;
 
@@ -151,6 +151,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             this.Text = "Cancelar/Fechar orçamentos em aberto";
             e.SecurityIdList.Add(_itemSeg);
             e.CancelButtonVisisble = true;
+            
         }
         private void CancelamentoOrcamentoView_BeforeProcess(object sender, BeforeProcessEventArgs e)
         {
@@ -163,7 +164,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             if (optFechar.Checked)
                 _tipoAcao = TipoAcaoEnum.FecharOrcamento;
 
-            if (optAbrirOrcamento.Checked)
+            if (optReabrirOrcamento.Checked)
                 _tipoAcao = TipoAcaoEnum.AbrirOrcamento;
 
             var permission = PermissionControl.Factory().ValidatePermission(_itemSeg, dpLibrary05.mGenerico.PermissionEnum.Execute);
@@ -257,7 +258,7 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
             if (e.Control && e.Shift && e.KeyCode == Keys.D)
             {
                 _orcamentoList.ChangeCheckState(false);
-            }
+            }           
 
         }
 
@@ -457,11 +458,27 @@ namespace Dataplace.Imersao.Presentation.Views.Orcamentos.Tools
         }
 
 
-        private void VerificarStatusControles() {
-
-            // exemplo pra deixar componente intaivo dependendo de uma opão
-            // dtpPrevisaoEntrega.Enabled = optAtribuirPevisaoEntrega.Checked;
-
+        private void VerificarStatusControles() 
+        {
+            if (optCancelar.Checked)
+            {
+                chkAberto.Checked = true;
+                chkFechado.Checked = false;
+                chkCancelado.Checked = false;                    
+            }
+            if (optFechar.Checked)
+            {
+                chkAberto.Checked = true;
+                chkFechado.Checked = false;
+                chkCancelado.Checked = false;
+            }
+            if (optReabrirOrcamento.Checked)
+            {
+                chkAberto.Checked = false;
+                chkFechado.Checked = true;
+                chkCancelado.Checked = true;
+            }
+            _orcamentoList.Clear();
         }
         #endregion
 

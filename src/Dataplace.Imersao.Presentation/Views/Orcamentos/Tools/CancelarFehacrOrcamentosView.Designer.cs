@@ -56,7 +56,7 @@
             this.dpiCliente = new dpLibrary05.Infrastructure.Controls.DPInput();
             this.dpiNumOrcamento = new dpLibrary05.Infrastructure.Controls.DPInput();
             this.chkDataOrcamento = new System.Windows.Forms.CheckBox();
-            this.optAbrirOrcamento = new System.Windows.Forms.RadioButton();
+            this.optReabrirOrcamento = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.gridOrcamento)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -226,7 +226,7 @@
             // 
             this.gbAcoes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbAcoes.Controls.Add(this.optAbrirOrcamento);
+            this.gbAcoes.Controls.Add(this.optReabrirOrcamento);
             this.gbAcoes.Controls.Add(this.optFechar);
             this.gbAcoes.Controls.Add(this.optCancelar);
             this.gbAcoes.Location = new System.Drawing.Point(4, 580);
@@ -242,7 +242,7 @@
             // 
             this.optFechar.AutoSize = true;
             this.optFechar.Checked = true;
-            this.optFechar.Location = new System.Drawing.Point(32, 42);
+            this.optFechar.Location = new System.Drawing.Point(32, 56);
             this.optFechar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.optFechar.Name = "optFechar";
             this.optFechar.Size = new System.Drawing.Size(137, 20);
@@ -253,7 +253,7 @@
             // optCancelar
             // 
             this.optCancelar.AutoSize = true;
-            this.optCancelar.Location = new System.Drawing.Point(32, 18);
+            this.optCancelar.Location = new System.Drawing.Point(32, 23);
             this.optCancelar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.optCancelar.Name = "optCancelar";
             this.optCancelar.Size = new System.Drawing.Size(149, 20);
@@ -414,16 +414,16 @@
             this.chkDataOrcamento.Text = "Data do Orçamento";
             this.chkDataOrcamento.UseVisualStyleBackColor = true;
             // 
-            // optAbrirOrcamento
+            // optReabrirOrcamento
             // 
-            this.optAbrirOrcamento.AutoSize = true;
-            this.optAbrirOrcamento.Location = new System.Drawing.Point(32, 67);
-            this.optAbrirOrcamento.Margin = new System.Windows.Forms.Padding(4);
-            this.optAbrirOrcamento.Name = "optAbrirOrcamento";
-            this.optAbrirOrcamento.Size = new System.Drawing.Size(123, 20);
-            this.optAbrirOrcamento.TabIndex = 7;
-            this.optAbrirOrcamento.Text = "Abrir orçamento";
-            this.optAbrirOrcamento.UseVisualStyleBackColor = true;
+            this.optReabrirOrcamento.AutoSize = true;
+            this.optReabrirOrcamento.Location = new System.Drawing.Point(218, 23);
+            this.optReabrirOrcamento.Margin = new System.Windows.Forms.Padding(4);
+            this.optReabrirOrcamento.Name = "optReabrirOrcamento";
+            this.optReabrirOrcamento.Size = new System.Drawing.Size(140, 20);
+            this.optReabrirOrcamento.TabIndex = 7;
+            this.optReabrirOrcamento.Text = "Reabrir orçamento";
+            this.optReabrirOrcamento.UseVisualStyleBackColor = true;
             // 
             // CancelarFehacrOrcamentosView
             // 
@@ -494,6 +494,6 @@
         private dpLibrary05.Infrastructure.Controls.DPInput dpiCliente;
         private dpLibrary05.Infrastructure.Controls.DPInput dpiNumOrcamento;
         private System.Windows.Forms.CheckBox chkDataOrcamento;
-        private System.Windows.Forms.RadioButton optAbrirOrcamento;
+        private System.Windows.Forms.RadioButton optReabrirOrcamento;
     }
 }
